@@ -40,7 +40,10 @@ jobs:
           echo '**/migrations/**' >> .gitignore
 
       - name: Commit and push migrations to main-migration branch
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git add .
           git commit -m "Run Django migrations"
+          git remote add origin https://github.com/rudhraio/django-docker.git
           git push origin main-migration
