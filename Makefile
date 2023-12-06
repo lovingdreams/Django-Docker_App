@@ -7,6 +7,12 @@ env-setup:
 	source venv/bin/activate; \
 	pip install -r requirements.txt;
 
+prod-migrations: env-setup
+	source venv/bin/activate; \
+	python manage.py makemigrations; \
+    python manage.py migrate; \
+
+
 run-local: env-setup
 	source venv/bin/activate; \
 	python manage.py makemigrations; \

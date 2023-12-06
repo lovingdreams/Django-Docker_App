@@ -1,0 +1,41 @@
+name: Django Migrations
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Check if main-migration branch exists
+        run: |
+          if git show-ref --quiet refs/heads/main-migration; then
+            echo "Branch main-migration exists"
+            git fetch origin main-migration:main-migration
+            git checkout main-migration
+            git pull origin main-migration
+          else
+            echo "Branch main-migration does not exist"
+            git checkout -b main-migration
+          fi
+
+      - name: Make Migrations
+        run: make prod-migrations
+
+      - name: Run Django migrations
+        run: |
+          grep -vE '^\*\*/migrations/\*\*' .gitignore > .gitignore_temp
+          mv .gitignore_temp .gitignore
+          echo '**/migrations/**' >> .gitignore
+
+      - name: Commit and push migrations to main-migration branch
+        run: |
+          git add .
+          git commit -m "Run Django migrations"
+          git push origin main-migration
