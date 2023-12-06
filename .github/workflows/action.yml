@@ -37,7 +37,7 @@ jobs:
 
       - name: Commit and push migrations to main-migration branch
         env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TOKEN: ${{ secrets.PAT }}
         run: |
           grep -vE '^\*\*/migrations/\*\*' .gitignore > .gitignore_temp
           mv .gitignore_temp .gitignore
@@ -45,3 +45,5 @@ jobs:
           git commit -m "Run Django migrations"
           git remote add remote https://github.com/rudhraio/django-docker.git
           git push remote main-migration
+
+          
