@@ -9,7 +9,6 @@ env-setup:
 
 prod-migrations: env-setup
 	source venv/bin/activate; \
-	export CONFIG_PATH=common/configs/prod.cfg; \ 
 	python manage.py makemigrations; \
     python manage.py migrate; \
 

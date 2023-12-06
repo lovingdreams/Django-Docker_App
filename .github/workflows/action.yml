@@ -30,6 +30,9 @@ jobs:
             git checkout -b main-migration
           fi
 
+      - name: Set CONFIG_PATH variable
+        run: export CONFIG_PATH=common/configs/prod.cfg
+        
       - name: Make Migrations
         run: make prod-migrations
 
