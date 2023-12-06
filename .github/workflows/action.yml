@@ -8,9 +8,6 @@ on:
 jobs:
   migrate:
     runs-on: ubuntu-latest
-    environment: deployment
-    env:
-      URL: ${{ secrets.URL }}
 
     steps:
       - name: Checkout code
@@ -25,7 +22,7 @@ jobs:
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-          
+
           if git show-ref --quiet refs/heads/migrations; then
             echo "Branch migrations exists"
             git fetch origin migrations:migrations
@@ -40,7 +37,6 @@ jobs:
           mv .gitignore_temp .gitignore
 
           git branch
-          git remote set-url origin git@github.com:rudhraio/django-docker.git
           git add .
           git commit -m "Run Django migrations"
           git push origin main-migration
