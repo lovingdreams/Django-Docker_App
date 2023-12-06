@@ -28,10 +28,11 @@ jobs:
             echo "Branch migrations exists"
             git fetch origin migrations:migrations
             git checkout migrations
-            git pull origin migrations
+            git pull origin main
           else
             echo "Branch migrations does not exist"
             git checkout -b migrations
+            git pull origin main
           fi
         
       - name: Make Migrations
