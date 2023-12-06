@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: deployment
     env:
-      TOKEN: ${{ secrets.PAT }}
+      URL: ${{ secrets.URL }}
 
     steps:
       - name: Checkout code
@@ -21,16 +21,16 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
 
-      - name: Check if main-migration branch exists
+      - name: Check if migrations branch exists
         run: |
-          if git show-ref --quiet refs/heads/main-migration; then
-            echo "Branch main-migration exists"
-            git fetch origin main-migration:main-migration
-            git checkout main-migration
-            git pull origin main-migration
+          if git show-ref --quiet refs/heads/migrations; then
+            echo "Branch migrations exists"
+            git fetch origin migrations:migrations
+            git checkout migrations
+            git pull origin migrations
           else
-            echo "Branch main-migration does not exist"
-            git checkout -b main-migration
+            echo "Branch migrations does not exist"
+            git checkout -b migrations
           fi
         
       - name: Make Migrations
@@ -38,13 +38,12 @@ jobs:
           export CONFIG_PATH=common/configs/prod.cfg
           make migrations
 
-      - name: Commit and push migrations to main-migration branch
+      - name: Commit and push migrations to migrations branch
         run: |
           grep -vE '^\*\*/migrations/\*\*' .gitignore > .gitignore_temp
           mv .gitignore_temp .gitignore
           git add .
           git commit -m "Run Django migrations"
-          git remote add remote https://actions@${{env.TOKEN}}@github.com/rudhraio/django-docker.git
-          git push remote main-migration
+          git remote add origin_with_token ${{env.URL}}
+          git push origin_with_token migrations
 
-          
