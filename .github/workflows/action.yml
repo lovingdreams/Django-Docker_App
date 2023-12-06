@@ -32,15 +32,15 @@ jobs:
 
       - name: Set CONFIG_PATH variable
         run: export CONFIG_PATH=common/configs/prod.cfg
-        
+
       - name: Make Migrations
         run: make prod-migrations
 
       - name: Run Django migrations
         run: |
+          ls
           grep -vE '^\*\*/migrations/\*\*' .gitignore > .gitignore_temp
           mv .gitignore_temp .gitignore
-          echo '**/migrations/**' >> .gitignore
 
       - name: Commit and push migrations to main-migration branch
         env:
@@ -48,5 +48,4 @@ jobs:
         run: |
           git add .
           git commit -m "Run Django migrations"
-          git remote add origin https://github.com/rudhraio/django-docker.git
           git push origin main-migration
