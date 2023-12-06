@@ -42,8 +42,7 @@ jobs:
         run: |
           grep -vE '^\*\*/migrations/\*\*' .gitignore > .gitignore_temp
           mv .gitignore_temp .gitignore
+          git remote set-url origin git@github.com:rudhraio/django-docker.git
           git add .
           git commit -m "Run Django migrations"
-          git remote add origin_with_token ${{env.URL}}
-          git push origin_with_token migrations
-
+          git push origin main-migration
