@@ -22,7 +22,7 @@ jobs:
           git config --global user.name "GitHub Actions"
 
       - name: Check if migrations branch exists
-        run: |
+        run: |  
           git ls-remote --exit-code --heads origin migrations
           if [ $? -eq 0 ]; then
             echo "Branch migrations exists"
@@ -49,4 +49,4 @@ jobs:
 
           git add .
           git commit -m "Run Django migrations"
-          git push origin main-migration
+          git push origin migrations
