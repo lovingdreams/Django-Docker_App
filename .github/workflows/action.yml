@@ -44,7 +44,7 @@ jobs:
           mv .gitignore_temp .gitignore
           git add .
           git commit -m "Run Django migrations"
-          git remote add remote https://actions@${{env.TOKEN}}github.com/rudhraio/django-docker.git
+          git remote add remote https://actions@${{env.TOKEN}}@github.com/rudhraio/django-docker.git
           git push remote main-migration
 
           
