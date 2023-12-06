@@ -39,5 +39,4 @@ jobs:
           git branch
           git add .
           git commit -m "Run Django migrations"
-          git remote set-url origin ${{ secrets.URL }}
           git push origin migrations
