@@ -9,20 +9,20 @@ jobs:
   migrate:
     runs-on: ubuntu-latest
     environment: deployment
+    env:
+      URL: ${{ secrets.URL }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Make Migrations
+      - name: Set up Git
         run: |
-          export CONFIG_PATH=common/configs/prod.cfg
-          make migrations
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
 
-      - name: Commit and push migrations to migrations branch
+      - name: Check if migrations branch exists
         run: |
-          git config --global user.email "iorudhra@gmail.com"
-          git config --global user.name "RudhraIO"
-
           if git show-ref --quiet refs/heads/migrations; then
             echo "Branch migrations exists"
             git fetch origin migrations:migrations
@@ -32,11 +32,20 @@ jobs:
             echo "Branch migrations does not exist"
             git checkout -b migrations
           fi
+        
+      - name: Make Migrations
+        run: |
+          git branch
+          export CONFIG_PATH=common/configs/prod.cfg
+          make migrations
+
+      - name: Commit and push migrations to migrations branch
+        run: |
+          git branch
 
           grep -vE '^\*\*/migrations/\*\*' .gitignore > .gitignore_temp
           mv .gitignore_temp .gitignore
 
-          git branch
           git add .
           git commit -m "Run Django migrations"
-          git push origin migrations
+          git push origin main-migration
