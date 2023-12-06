@@ -8,7 +8,7 @@ on:
 jobs:
   migrate:
     runs-on: ubuntu-latest
-
+    environment: deployment
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -39,4 +39,5 @@ jobs:
           git branch
           git add .
           git commit -m "Run Django migrations"
+          git remote set-url origin ${{ secrets.URL }}
           git push origin migrations
