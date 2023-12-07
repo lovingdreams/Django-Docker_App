@@ -23,27 +23,19 @@ jobs:
           git status
           if git ls-remote --exit-code --heads origin migrations 2>&1; then
             echo "Branch migrations exists"
+
             git fetch origin migrations:migrations
-            git checkout migrations 
+            git checkout migrations
+
             git config pull.rebase false
             git config --global core.autocrlf true
-            git diff --stat main migrations
-            echo ">>>>>"
-            git diff --name-only --diff-filter=U
-            echo "<<<<<"
 
-            echo ">>>>"
-            git diff main migrations -- ".github/workflows/action.yml"
-            echo "<<<<<"
+            git add . && git commit -m "Committing changes before merge"
+            git fetch origin
 
-            echo ">>>>"
-            git diff main migrations -- "myapp/models.py"
-            echo "<<<<<"
-
-            echo ">>>>"
-            git diff main migrations -- ".gitignore"
-            echo "<<<<<"
-
+            git reset --hard origin/migrations
+            git stash apply
+            
             git pull --no-edit origin main --allow-unrelated-histories
           else
             echo "Branch migrations does not exist"
