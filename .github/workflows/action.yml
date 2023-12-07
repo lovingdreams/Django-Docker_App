@@ -23,21 +23,10 @@ jobs:
           git status
           if git ls-remote --exit-code --heads origin migrations 2>&1; then
             echo "Branch migrations exists"
-            git config pull.rebase false
-            
             git fetch origin migrations:migrations
-            echo "------------>"
-            git status
-            echo "Diff ------------>"
-            git diff --name-only --diff-filter=U
-
-            echo "Diff M&M ------------>"
-            git diff main migrations
-            
-            echo "<------------>"
-
-            git pull --no-edit origin migrations --allow-unrelated-histories
-            git diff --name-only --diff-filter=U
+            git checkout migrations 
+            git config pull.rebase false
+            git pull --no-edit origin main --allow-unrelated-histories
           else
             echo "Branch migrations does not exist"
             git checkout -b migrations
