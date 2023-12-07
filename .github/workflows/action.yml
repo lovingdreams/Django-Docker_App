@@ -8,9 +8,6 @@ on:
 jobs:
   migrate:
     runs-on: ubuntu-latest
-    environment: deployment
-    env:
-      URL: ${{ secrets.URL }}
 
     steps:
       - name: Checkout code
@@ -26,12 +23,10 @@ jobs:
           if git ls-remote --exit-code --heads origin migrations 2>&1; then
             echo "Branch migrations exists"
             git fetch origin migrations:migrations
-            git checkout migrations
-            git rebase main
+            git pull origin migrations
           else
             echo "Branch migrations does not exist"
             git checkout -b migrations
-            git rebase main
           fi
         
       - name: Make Migrations
