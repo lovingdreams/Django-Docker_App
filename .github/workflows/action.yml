@@ -84,6 +84,7 @@ jobs:
         run: |
           git config pull.rebase false
           git pull origin mig || true
+          git pull origin main || true
           git checkout mig -- */migrations/*
 
       - name: Run Django migrations
