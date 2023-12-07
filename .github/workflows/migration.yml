@@ -21,7 +21,7 @@ jobs:
       - name: Pull migrations branch if exists
         run: |
           git fetch origin migrations:migrations || true
-          git checkout migrations || git checkout -b migrations
+          git checkout migrations -- */migrations/*
 
           git branch
           git status
