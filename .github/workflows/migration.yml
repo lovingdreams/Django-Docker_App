@@ -24,6 +24,7 @@ jobs:
           git checkout migrations || git checkout -b migrations
 
           git branch
+          git status
 
           git config pull.rebase false
           git pull --no-edit origin main --allow-unrelated-histories
