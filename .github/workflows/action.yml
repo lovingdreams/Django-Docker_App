@@ -29,6 +29,7 @@ jobs:
             echo "------------>"
 
             git status
+            git diff --name-only --diff-filter=U
             git pull --no-edit origin migrations --allow-unrelated-histories
             git diff --name-only --diff-filter=U
           else
