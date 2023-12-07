@@ -82,6 +82,7 @@ jobs:
 
       - name: Pull migration files from mig branch
         run: |
+          git config pull.rebase false
           git pull origin mig || true
           git checkout mig -- */migrations/*
 
