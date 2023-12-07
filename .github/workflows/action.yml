@@ -22,8 +22,9 @@ jobs:
         run: |  
           if git ls-remote --exit-code --heads origin migrations 2>&1; then
             echo "Branch migrations exists"
+            git config pull.rebase false
             git fetch origin migrations:migrations
-            git rebase migrations
+            git pull --no-edit origin migrations
           else
             echo "Branch migrations does not exist"
             git checkout -b migrations
