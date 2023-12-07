@@ -27,9 +27,15 @@ jobs:
             
             git fetch origin migrations:migrations
             echo "------------>"
-
             git status
+            echo "Diff ------------>"
             git diff --name-only --diff-filter=U
+
+            echo "Diff M&M ------------>"
+            git diff main migrations
+            
+            echo "<------------>"
+
             git pull --no-edit origin migrations --allow-unrelated-histories
             git diff --name-only --diff-filter=U
           else
