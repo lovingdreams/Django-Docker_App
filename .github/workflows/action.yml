@@ -29,17 +29,15 @@ jobs:
             echo "Branch migrations does not exist"
             git checkout -b migrations
           fi
-        
+      
       - name: Make Migrations
         run: |
           git branch
           export CONFIG_PATH=common/configs/prod.cfg
           make migrations
-
+      
       - name: Commit and push migrations to migrations branch
         run: |
-          git branch
-
           grep -vE '^\*\*/migrations/\*\*' .gitignore > .gitignore_temp
           mv .gitignore_temp .gitignore
 
