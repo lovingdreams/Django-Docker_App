@@ -24,7 +24,7 @@ jobs:
             echo "Branch migrations exists"
             git config pull.rebase false
             git fetch origin migrations:migrations
-            git pull --no-edit origin migrations
+            git pull --no-edit origin migrations --allow-unrelated-histories
           else
             echo "Branch migrations does not exist"
             git checkout -b migrations
@@ -35,7 +35,7 @@ jobs:
           git branch
           export CONFIG_PATH=common/configs/prod.cfg
           make migrations
-      
+
       - name: Commit and push migrations to migrations branch
         run: |
           grep -vE '^\*\*/migrations/\*\*' .gitignore > .gitignore_temp
