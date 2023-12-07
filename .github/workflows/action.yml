@@ -26,6 +26,7 @@ jobs:
             git fetch origin migrations:migrations
             git checkout migrations 
             git config pull.rebase false
+            git config --global core.autocrlf true
             git diff --stat main migrations
             echo ">>>>>"
             git diff --name-only --diff-filter=U
