@@ -97,4 +97,4 @@ jobs:
 
           git add .
           git commit -m "Run Django migrations"
-          git push origin migrations
+          git push origin mig
