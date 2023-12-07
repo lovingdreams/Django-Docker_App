@@ -78,9 +78,7 @@ jobs:
 
       - name: Check if mig branch exists
         run: |
-          git fetch origin mig:mig || true
-          git checkout mig || true
-          git switch -c mig || true
+          git fetch origin mig:mig || git checkout -b mig origin/main
 
       - name: Pull migration files from mig branch
         run: |
