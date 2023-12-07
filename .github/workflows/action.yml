@@ -27,6 +27,9 @@ jobs:
             git checkout migrations 
             git config pull.rebase false
             git diff --stat main migrations
+            echo ">>>>>"
+            git diff --name-only --diff-filter=U
+            echo "<<<<<"
             git pull --no-edit origin main --allow-unrelated-histories
           else
             echo "Branch migrations does not exist"
