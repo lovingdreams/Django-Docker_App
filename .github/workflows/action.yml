@@ -31,6 +31,19 @@ jobs:
             echo ">>>>>"
             git diff --name-only --diff-filter=U
             echo "<<<<<"
+
+            echo ">>>>"
+            git diff main migrations -- ".github/workflows/action.yml"
+            echo "<<<<<"
+
+            echo ">>>>"
+            git diff main migrations -- "myapp/models.py"
+            echo "<<<<<"
+
+            echo ">>>>"
+            git diff main migrations -- ".gitignore"
+            echo "<<<<<"
+
             git pull --no-edit origin main --allow-unrelated-histories
           else
             echo "Branch migrations does not exist"
