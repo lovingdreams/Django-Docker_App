@@ -21,12 +21,13 @@ jobs:
       - name: Pull migrations branch if exists
         run: |
           git fetch origin migrations:migrations || true
+          git checkout migrations || git checkout -b migrations
 
           git branch
           git status
 
           git config pull.rebase false
-          git pull --no-edit origin migrations --allow-unrelated-histories
+          git pull --no-edit origin main --allow-unrelated-histories
         
       - name: Run Django migrations
         run: |
