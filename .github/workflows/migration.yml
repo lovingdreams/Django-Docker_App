@@ -42,8 +42,8 @@ jobs:
           mv .gitignore_temp .gitignore
 
           git add .
-          git commit -m "Run Django migrations"
-          git push origin migrations
+          git commit -m "Run Django migrations" || true
+          git push origin migrations || true
   
   docker-build-and-push:
     runs-on: ubuntu-latest
@@ -75,4 +75,40 @@ jobs:
       - name: Push Docker image to ECR
         run: |
           docker push 556431762846.dkr.ecr.ap-south-1.amazonaws.com/django-project:latest
-          
+
+  # deploy:
+  #   needs: docker-build-and-push
+  #   runs-on: ubuntu-latest
+  #   environment: beta
+  #   env:
+  #     HOST: ${{ secrets.HOST }}
+  #     USER: ${{ secrets.USER }}
+  #     KEY: ${{ secrets.KEY }}
+  #     PORT: ${{ secrets.PORT }}
+  #     NAME: deploy-server
+  #   steps:
+  #     - name: create key
+  #       run: |
+  #         mkdir -p ~/.ssh/
+  #         echo "${{ env.KEY }}" > ~/.ssh/${{ env.NAME }}.key
+  #         sudo chmod 600 ~/.ssh/${{ env.NAME }}.key
+  #       shell: bash
+  #     - name: Scan the public ssh host keys
+  #       run: ssh-keyscan -H ${{ env.HOST }} >> ~/.ssh/known_hosts
+  #       shell: bash
+  #     - name: Create SSH config
+  #       run: |
+  #         cat >>~/.ssh/config <<END
+  #         Host ${{ env.NAME }}
+  #           HostName ${{ env.HOST }}
+  #           Port ${{ env.PORT }}
+  #           User ${{ env.USER }}
+  #           IdentityFile ~/.ssh/${{ env.NAME }}.key
+  #         END
+  #       shell: bash
+  #     - name: run commands
+  #       run:  |
+  #         ssh ${{env.NAME}} << EOF
+            
+  #         EOF
+  #       shell: bash
