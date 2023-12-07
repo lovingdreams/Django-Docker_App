@@ -20,9 +20,12 @@ jobs:
 
       - name: Check if migrations branch exists
         run: |  
+          git status
           if git ls-remote --exit-code --heads origin migrations 2>&1; then
             echo "Branch migrations exists"
             git config pull.rebase false
+            git status
+            git log
             git fetch origin migrations:migrations
             git pull --no-edit origin migrations --allow-unrelated-histories
           else
