@@ -20,11 +20,31 @@ jobs:
 
       - name: Check if migrations branch exists
         run: |  
+          git status
           if git ls-remote --exit-code --heads origin migrations 2>&1; then
             echo "Branch migrations exists"
-            git config pull.rebase false
             git fetch origin migrations:migrations
-            git pull --no-edit origin migrations --allow-unrelated-histories
+            git checkout migrations 
+            git config pull.rebase false
+            git config --global core.autocrlf true
+            git diff --stat main migrations
+            echo ">>>>>"
+            git diff --name-only --diff-filter=U
+            echo "<<<<<"
+
+            echo ">>>>"
+            git diff main migrations -- ".github/workflows/action.yml"
+            echo "<<<<<"
+
+            echo ">>>>"
+            git diff main migrations -- "myapp/models.py"
+            echo "<<<<<"
+
+            echo ">>>>"
+            git diff main migrations -- ".gitignore"
+            echo "<<<<<"
+
+            git pull --no-edit origin main --allow-unrelated-histories
           else
             echo "Branch migrations does not exist"
             git checkout -b migrations
