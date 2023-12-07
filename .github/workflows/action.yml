@@ -83,7 +83,7 @@ jobs:
       - name: Pull migration files from mig branch
         run: |
           git pull origin mig || true
-          git checkout mig -- */migration/*
+          git checkout mig -- */migrations/*
 
       - name: Run Django migrations
         run: |
