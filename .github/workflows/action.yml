@@ -33,7 +33,6 @@ jobs:
             git fetch origin
 
             git reset --hard origin/migrations
-            git stash apply
             
             git pull --no-edit origin main --allow-unrelated-histories
           else
