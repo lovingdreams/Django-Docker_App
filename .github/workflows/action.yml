@@ -1,4 +1,62 @@
-name: Django Migrations
+# name: Django Migrations
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   migrate:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Set up Git
+#         run: |
+#           git config --global user.email "actions@github.com"
+#           git config --global user.name "GitHub Actions"
+
+#       - name: Check if migrations branch exists
+#         run: |  
+#           git status
+#           if git ls-remote --exit-code --heads origin migrations 2>&1; then
+#             echo "Branch migrations exists"
+
+#             git fetch origin migrations:migrations
+#             git checkout migrations
+
+#             git config pull.rebase false
+#             git config --global core.autocrlf true
+
+#             git fetch origin
+
+#             git reset --hard origin/migrations
+            
+#             git pull --no-edit origin main --allow-unrelated-histories
+#           else
+#             echo "Branch migrations does not exist"
+#             git checkout -b migrations
+#           fi
+      
+#       - name: Make Migrations
+#         run: |
+#           git branch
+#           export CONFIG_PATH=common/configs/prod.cfg
+#           make migrations
+
+#       - name: Commit and push migrations to migrations branch
+#         run: |
+#           grep -vE '^\*\*/migrations/\*\*' .gitignore > .gitignore_temp
+#           mv .gitignore_temp .gitignore
+
+#           git add .
+#           git commit -m "Run Django migrations"
+#           git push origin migrations
+
+
+name: Django Migration Workflow
 
 on:
   push:
@@ -6,11 +64,11 @@ on:
       - main
 
 jobs:
-  migrate:
+  migrate_and_push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Set up Git
@@ -18,49 +76,25 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
 
-      - name: Check if migrations branch exists
-        run: |  
-          git status
-          if git ls-remote --exit-code --heads origin migrations 2>&1; then
-            echo "Branch migrations exists"
-            git fetch origin migrations:migrations
-            git checkout migrations 
-            git config pull.rebase false
-            git config --global core.autocrlf true
-            git diff --stat main migrations
-            echo ">>>>>"
-            git diff --name-only --diff-filter=U
-            echo "<<<<<"
-
-            echo ">>>>"
-            git diff main migrations -- ".github/workflows/action.yml"
-            echo "<<<<<"
-
-            echo ">>>>"
-            git diff main migrations -- "myapp/models.py"
-            echo "<<<<<"
-
-            echo ">>>>"
-            git diff main migrations -- ".gitignore"
-            echo "<<<<<"
-
-            git pull --no-edit origin main --allow-unrelated-histories
-          else
-            echo "Branch migrations does not exist"
-            git checkout -b migrations
-          fi
-      
-      - name: Make Migrations
+      - name: Check if mig branch exists
         run: |
-          git branch
+          git fetch origin mig:mig || git checkout -b mig origin/main
+
+      - name: Pull migration files from mig branch
+        run: |
+          git pull origin mig || true
+          git checkout mig -- */migrations/*
+
+      - name: Run Django migrations
+        run: |
           export CONFIG_PATH=common/configs/prod.cfg
           make migrations
 
-      - name: Commit and push migrations to migrations branch
+      - name: Commit and push new migration files
         run: |
           grep -vE '^\*\*/migrations/\*\*' .gitignore > .gitignore_temp
           mv .gitignore_temp .gitignore
 
           git add .
           git commit -m "Run Django migrations"
-          git push origin migrations
+          git push origin mig
