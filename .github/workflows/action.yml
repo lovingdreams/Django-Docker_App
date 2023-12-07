@@ -84,7 +84,7 @@ jobs:
         run: |
           git config pull.rebase false
           git pull origin mig || true
-          git pull origin main || true
+          git pull --no-edit origin main --allow-unrelated-histories || true
           git checkout mig -- */migrations/*
 
       - name: Run Django migrations
