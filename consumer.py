@@ -1,3 +1,12 @@
+from prometheus_client import start_http_server, Counter
+
+start_http_server(9798)  # Choose a port different from Django
+
+consumer_metric = Counter('consumer_requests_total', 'Total number of requests handled by the consumer')
+
+consumer_metric.inc()
+
+
 import os
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myproject.settings")

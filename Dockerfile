@@ -14,6 +14,10 @@ COPY requirements.txt /app/
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 RUN	pip install gunicorn
+RUN  pip install django-prometheus
+
+# Install Prometheus client for Python
+RUN pip install prometheus_client
 
 # Copy the current directory contents into the container at /app
 COPY . /app/
