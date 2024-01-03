@@ -2,21 +2,20 @@ version: '3'
 
 services:
   django:
-    image: your-django-image-name
+    image: django
     environment:
       - CONFIG_PATH=common/configs/prod.cfg
     command: gunicorn --access-logfile - --workers 3 --max-requests 1000 --max-requests-jitter 50 --bind 0.0.0.0:8000 --env CONFIG_PATH=common/configs/prod.cfg myproject.wsgi:application --prometheus-exporter-port 9797
     ports:
       - "8000:8000"
     depends_on:
-      - celery
-      - consumer
+      - celery      
     networks:
       - django-network
 
 
   celery:
-    image: your-django-image-name
+    image: django
     environment:
       - CONFIG_PATH=common/configs/prod.cfg
       - DJANGO_SETTINGS_MODULE=myproject.settings
@@ -26,7 +25,7 @@ services:
 
 
   consumer:
-    image: your-django-image-name
+    image: django
     environment:
       - CONFIG_PATH=common/configs/prod.cfg
       - DJANGO_SETTINGS_MODULE=myproject.settings
@@ -34,7 +33,6 @@ services:
     networks:
       - django-network
 
-  
   prometheus:
     image: prom/prometheus
     volumes:
